@@ -22,11 +22,11 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
                     
-            Vector2 v = new Vector2(0, 1);
+            //Vector2 v = new Vector2(0, 1);
         
             if (r != null)
             {
-                r.AddForce(v * force );
+                r.linearVelocity = new Vector2(0f, force);
             }
                     
         }

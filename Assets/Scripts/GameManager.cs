@@ -52,6 +52,7 @@ public class GameManager : MonoBehaviour
         }
         Destroy(pipeSpawner.GetComponent<Spawner>());
         Destroy(player.GetComponent<Player>());
+        player.GetComponent<Animator>().SetTrigger("Die");
     }
 
     public void restartGame()
