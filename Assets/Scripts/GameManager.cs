@@ -7,8 +7,15 @@ public class GameManager : MonoBehaviour
 {
 
     public TextMeshProUGUI textScore;
+    public TextMeshProUGUI textBestScore;
 
-    private int score;
+    public TextMeshProUGUI textNewRecord;
+
+    private int score = 0;
+    private int bestScore = 0;
+    private bool isNewRecord = false;
+
+    public GameObject newRecordPlane;
     public GameObject gameOverPlane;
     public GameObject pipeSpawner;
     public GameObject player;
@@ -18,6 +25,13 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         gameOverPlane.SetActive(false);
+        
+        newRecordPlane.gameObject.SetActive(false);
+        
+        bestScore = PlayerPrefs.GetInt("bestScore", 0);
+        
+        updateScoretext();
+        updateBestScoreText();
     }
 
     // Update is called once per frame
@@ -29,8 +43,20 @@ public class GameManager : MonoBehaviour
     public void addScore()
     {
         score++;
+
+        if (score > bestScore)
+        {
+            bestScore = score;
+            
+            isNewRecord = true;
+            
+            PlayerPrefs.SetInt("bestScore", bestScore);
+            PlayerPrefs.Save();
+        }
         
         updateScoretext();
+
+        updateBestScoreText();
     }
 
     void updateScoretext()
@@ -41,9 +67,24 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void updateBestScoreText()
+    {
+        if (textBestScore != null)
+        {
+            textBestScore.text = $"Best Score: {bestScore}";
+        }
+    }
+
     public void StopGame()
     {
         gameOverPlane.SetActive(true);
+
+        if (isNewRecord == true && textNewRecord != null)
+        {
+            textNewRecord.text = $"Record batut: {bestScore}";
+            newRecordPlane.gameObject.SetActive(true);
+        }
+        
         GameObject[] pipes = GameObject.FindGameObjectsWithTag("PIPE");
         foreach (GameObject pipe in pipes)
         {
